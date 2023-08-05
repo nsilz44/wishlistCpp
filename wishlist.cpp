@@ -5,6 +5,15 @@ using namespace std;
 
 #define LIST "list.txt"
 
+void PrintOptions();
+void PrintList(string filename);
+
+int main () {
+    PrintList(LIST);
+    PrintOptions();
+}
+
+// prints whole list
 void PrintList(string filename){
     ifstream list(filename);
     if(list.is_open()){
@@ -17,7 +26,8 @@ void PrintList(string filename){
         list.close();
     }
 }
-
-int main () {
-    PrintList(LIST);
+void PrintOptions(){
+    cout << "To view current list type '-v'" << '\n';
+    cout << "To add item type '-a [ITEM]'" << '\n';
+    cout << "To delete item type '-v [ITEM]'" << '\n';
 }
