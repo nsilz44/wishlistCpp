@@ -8,13 +8,16 @@ using namespace std;
 
 void PrintOptions();
 void PrintList(string filename);
+void AddList(string item);
 
 int main () {
     PrintList(LIST);
     PrintOptions();
     string option;
+    string optionP;
     cin >> option;
     cout << '\n';
+    //optionP = &option;
     if(option.size() > 1){
         char optionLetter = option[1];
         switch (optionLetter)
@@ -22,6 +25,9 @@ int main () {
         case 'v': case 'V':
             PrintList(LIST);
             break;
+        case 'a': case 'A':
+            optionP = option.substr(2, option.length());
+            cout << optionP << '\n';
         default:
             break;
         }
@@ -46,4 +52,5 @@ void PrintOptions(){
     cout << "To view current list type '-v'" << '\n';
     cout << "To add item type '-a [ITEM]'" << '\n';
     cout << "To delete item type '-v [ITEM]'" << '\n';
+    cout << "To exit type 'exit'" << '\n';
 }
