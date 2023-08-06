@@ -10,13 +10,17 @@ using namespace std;
 void PrintOptions();
 void PrintList(string filename);
 void AddList(string item);
+void DeleteList(string item);
 string Trim(string line);
+
+const char* whitespace = " \t\n\r\f\v";
 
 int main () {
     PrintOptions();
     string option;
     string addingItem;
-    ofstream outfile;
+    string deleteItem;
+
     getline(cin, option);
     if(option.size() > 1){
         char optionLetter = option[1];
@@ -24,14 +28,17 @@ int main () {
         {
         case 'v': case 'V':
             PrintList(LIST);
-            break;
+            main();
         case 'a': case 'A':
             addingItem = option.substr(2, option.length());
             addingItem = Trim(addingItem);
-            cout << "\nadding " + addingItem + " to the list \n\n";
-            outfile.open(LIST, std::ios_base::app); // append instead of overwrite
-            outfile << '\n' << addingItem;
-            outfile.close();
+            AddList(addingItem);
+            PrintList(LIST);
+            main();
+        case 'd': case 'D':
+            deleteItem = option.substr(2, option.length());
+            deleteItem = Trim(deleteItem);
+            DeleteList(deleteItem);
             PrintList(LIST);
             main();
         default:
@@ -61,13 +68,43 @@ void PrintList(string filename){
 void PrintOptions(){
     cout << "To view current list type '-v'" << '\n';
     cout << "To add item type '-a [ITEM]'" << '\n';
-    cout << "To delete item type '-v [ITEM]'" << '\n';
+    cout << "To delete item type '-d [ITEM]'" << '\n';
     cout << "To exit type 'exit'" << '\n';
 }
 
 string Trim(string line){
-    const char* whitespace = " \t\n\r\f\v";
+    
     line.erase(0, line.find_first_not_of(whitespace));
     line.erase(line.find_last_not_of(whitespace) + 1);
     return line;
+}
+void AddList(string item){
+    ofstream outfile;
+    cout << "\nadding " + item + " to the list \n\n";
+    outfile.open(LIST, ios_base::app); // append instead of overwrite
+    outfile << '\n' << item;
+    outfile.close();
+}
+void DeleteList(string item){
+    bool found = false;
+    ifstream list(LIST);
+    ofstream temp;
+    temp.open("temp.txt",ios_base::trunc);
+    cout << item << '\n';
+    if(list.is_open()){
+        string line;
+        while (getline(list, line)) {
+            // checks delete item is in line and line isnt empty
+            if (line != item && !(line.empty())){
+                temp << line + '\n';
+            }
+            else {
+                found = true;
+            }
+        }
+        list.close();
+    temp.close();
+    unlink(LIST);
+    rename("temp.txt",LIST);
+    }
 }
