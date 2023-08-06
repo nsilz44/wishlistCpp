@@ -1,4 +1,5 @@
 #include <iostream>
+#include <functional>
 #include <fstream>
 #include <string>
 
@@ -9,14 +10,14 @@ using namespace std;
 void PrintOptions();
 void PrintList(string filename);
 void AddList(string item);
+string Trim(string line);
 
 int main () {
     PrintList(LIST);
     PrintOptions();
     string option;
-    string optionP;
-    cin >> option;
-    cout << '\n';
+    string addingItem;
+    getline(cin, option);
     //optionP = &option;
     if(option.size() > 1){
         char optionLetter = option[1];
@@ -26,8 +27,10 @@ int main () {
             PrintList(LIST);
             break;
         case 'a': case 'A':
-            optionP = option.substr(2, option.length());
-            cout << optionP << '\n';
+            addingItem = option.substr(2, option.length());
+            addingItem = Trim(addingItem);
+            cout << addingItem << '\n';
+            cout << addingItem.length() << '\n';
         default:
             break;
         }
@@ -53,4 +56,11 @@ void PrintOptions(){
     cout << "To add item type '-a [ITEM]'" << '\n';
     cout << "To delete item type '-v [ITEM]'" << '\n';
     cout << "To exit type 'exit'" << '\n';
+}
+
+string Trim(string line){
+    const char* whitespace = " \t\n\r\f\v";
+    line.erase(0, line.find_first_not_of(whitespace));
+    line.erase(line.find_last_not_of(whitespace) + 1);
+    return line;
 }
