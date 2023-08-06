@@ -13,12 +13,11 @@ void AddList(string item);
 string Trim(string line);
 
 int main () {
-    PrintList(LIST);
     PrintOptions();
     string option;
     string addingItem;
+    ofstream outfile;
     getline(cin, option);
-    //optionP = &option;
     if(option.size() > 1){
         char optionLetter = option[1];
         switch (optionLetter)
@@ -29,8 +28,12 @@ int main () {
         case 'a': case 'A':
             addingItem = option.substr(2, option.length());
             addingItem = Trim(addingItem);
-            cout << addingItem << '\n';
-            cout << addingItem.length() << '\n';
+            cout << "\nadding " + addingItem + " to the list \n\n";
+            outfile.open(LIST, std::ios_base::app); // append instead of overwrite
+            outfile << '\n' << addingItem;
+            outfile.close();
+            PrintList(LIST);
+            main();
         default:
             break;
         }
@@ -40,13 +43,17 @@ int main () {
 // prints whole list
 void PrintList(string filename){
     ifstream list(filename);
-    cout << "current wishlist" << '\n';
+    // code to underline words in terminal
+    const string UNDERLINE = "\x1B[4m";
+    const string RESET = "\x1B[0m";
+    cout << UNDERLINE + "Current wishlist" + RESET << '\n';
     if(list.is_open()){
         string tp;
         while (getline (list, tp)) {
     // Output the text from the file
         cout << tp << '\n';
-  }
+        }
+        cout << '\n';
         list.close();
     }
 }
