@@ -29,22 +29,29 @@ int main () {
         case 'v': case 'V':
             PrintList(LIST);
             main();
+            break;
         case 'a': case 'A':
             addingItem = option.substr(2, option.length());
             addingItem = Trim(addingItem);
             AddList(addingItem);
             PrintList(LIST);
             main();
+            break;
         case 'd': case 'D':
             deleteItem = option.substr(2, option.length());
             deleteItem = Trim(deleteItem);
             DeleteList(deleteItem);
             PrintList(LIST);
             main();
+            break;
+        case 'x': case 'X':
+            cout << "list saved and exiting"<< '\n';
+            break;
         default:
             break;
         }
     }
+    return 0 ;
 }
 
 // prints whole list
